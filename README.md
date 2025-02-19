@@ -33,7 +33,7 @@ While the main focus lies on the anonymization of MRI twix files, this tool also
 ## Getting started
 1. Clone repository:
    
-       git clone https://github.com/TIO-IKIM/TwixMRIAnonymizer.git
+       git clone https://github.com/swiftmr-research/TwixMRIAnonymizer.git
 
 2. Create a conda environment with Python version 3.11.2 and install the necessary dependencies:
    
