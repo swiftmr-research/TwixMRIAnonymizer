@@ -285,18 +285,19 @@ class TwixAnonymizer:
 
         for key, buffer in x_buffer.items():
             match = re.search(buffer, header_string)
-            matches[key] = match.group(3)
-            header_string = re.sub(
-                buffer,
-                lambda match: "".join(
-                    (
-                        match.group(1),
-                        ("x" * (len(match.group(3)))),
-                        match.group(4),
-                    )
-                ),
-                header_string,
-            )
+            if match:
+                matches[key] = match.group(3)
+                header_string = re.sub(
+                    buffer,
+                    lambda match: "".join(
+                        (
+                            match.group(1),
+                            ("x" * (len(match.group(3)))),
+                            match.group(4),
+                        )
+                    ),
+                    header_string,
+                )
 
         return header_string, matches
 
