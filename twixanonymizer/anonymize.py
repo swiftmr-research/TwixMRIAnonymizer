@@ -223,12 +223,7 @@ class TwixAnonymizer:
             "InstitutionName": r"(<ParamString.\"InstitutionName\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*\")(.+)(\"\s*\}\n)",
         }
         zero_buffer = {
-            "Patient_gender": r"(<ParamLong.\"l?PatientSex\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*)(\d+)(\s*\}\n)",
-            "Patient_age": r"(<ParamDouble.\"flPatientAge\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*<Precision> \d+\s*)(\d+\.\d*)(\s*\}\n)",
-            "Patient_weight": r"(<ParamDouble.\"flUsedPatientWeight\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*<Precision> \d+\s*)(\d+\.\d*)(\s*\}\n)",
-            "Patient_height": r"(<ParamDouble.\"flPatientHeight\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*<Unit> \"\[mm\]\"\s*<Precision> \d+\s*)(\d+\.\d*)(\s*\}\n)",
             "Patient_birthday": r"(<ParamString.\"PatientBirthDay\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*\")(\d{8})(\"\s*\}\n)",
-            "ulVersion": r"(<ParamLong.\"ulVersion\">\s*\{(\s*<Visible>\s*\"true\"\s*)?\s*)(\d+)(\s*\}\n)",
         }
         meta_buffer = {
             "tBodyPartExamined": r"(<ParamString.\"tBodyPartExamined\">\s*\{\s*\")(.+)(\"\s*\}\n)",
@@ -247,13 +242,6 @@ class TwixAnonymizer:
         }
 
         matches = {}
-                    
-        frame_of_reference = re.search(
-            r"(<ParamString.\"FrameOfReference\">  { )(\".+\")(  }\n)", header_string
-        ).group(2)
-        exam_date_time = frame_of_reference.split(".")[10]
-        exam_date = exam_date_time[2:8]
-        matches["Exam_date"] = TwixAnonymizer._get_date(exam_date)
         
         # Do not anonymize these buffers, but save them
         for key, buffer in meta_buffer.items():
@@ -309,12 +297,6 @@ class TwixAnonymizer:
                 ),
                 header_string,
             )
-
-        header_string = re.sub(
-            r"\"[\d\.]*{0}[\d\.]*\"".format(exam_date),
-            lambda match: re.sub(r"\w", "x", match.group()),
-            header_string,
-        )
 
         return header_string, matches
 
